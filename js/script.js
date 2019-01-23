@@ -34,7 +34,7 @@
 		fishId += 1;
 
 		// genrate an image name based on the fish id
-		var imagePath = "/fish-sim/images/fish.png";
+		var imagePath = "images/fish.png";
 		// create a new Texture that uses the image name that we just generated as its source
 		var fishTexture = PIXI.Texture.fromImage(imagePath);
 		// create asprite that uses our new sprite texture
