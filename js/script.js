@@ -101,7 +101,7 @@
 			var fish = fishArray[i];
 		
 		fish.interactive = true;
-   		fish.on('pointerover', onFish);
+   		fish.on('pointermove', onFish);
 			fish.direction += fish.turningSpeed * 0.01;
 			fish.position.x += Math.sin(fish.direction) * fish.speed;
 			fish.position.y += Math.cos(fish.direction) * fish.speed;
