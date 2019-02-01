@@ -39,7 +39,7 @@ stage.filterArea = new PIXI.Rectangle(0, 0, viewWidth, viewHeight);
 		fishId += 1;
 
 		// genrate an image name based on the fish id
-		var imagePath = "/images/fish.png";
+		var imagePath = "images/fish.png";
 		// create a new Texture that uses the image name that we just generated as its source
 		var fishTexture = PIXI.Texture.fromImage(imagePath);
 		// create asprite that uses our new sprite texture
