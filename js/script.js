@@ -13,15 +13,20 @@
 
 	// create an new instance of a pixi stage
 	var stage = new PIXI.Stage(0xFFFFFF);
-
+//speed up the process, because OVERLAY and HARD_LIGHT will use copyTex instead of readPixels
+stage.filters = [new PIXI.filters.VoidFilter()];
+stage.filterArea = new PIXI.Rectangle(0, 0, viewWidth, viewHeight);
 	// create a background texture
+	
 	var pondFloorTexture = PIXI.Texture.fromImage("images/bg.png");
 	// create a new background sprite
 	var pondFloorSprite = new PIXI.Sprite(pondFloorTexture);
 	pondFloorSprite.width=viewWidth;
 	pondFloorSprite.height=viewHeight;
+	pondFloorSprite.interactive = true; 
 	stage.addChild(pondFloorSprite);
-
+	
+	
 	// create an array to store a refference to the fish in the pond
 	var fishArray = [];
 	 
@@ -34,7 +39,7 @@
 		fishId += 1;
 
 		// genrate an image name based on the fish id
-		var imagePath = "images/fish.png";
+		var imagePath = "/images/fish.png";
 		// create a new Texture that uses the image name that we just generated as its source
 		var fishTexture = PIXI.Texture.fromImage(imagePath);
 		// create asprite that uses our new sprite texture
@@ -44,14 +49,14 @@
 		fish.anchor.x = fish.anchor.y = 0.5;
 
 		// set a random scale for the fish - no point them all being the same size!
-		fish.scale.x = fish.scale.y = 0.16 + Math.random() * 0.2;
+		fish.scale.x = fish.scale.y = 1.6 + Math.random() * 0.2;
 		
 		// finally let's set the fish to be a random position..
 		fish.position.x = Math.random() * viewWidth;
 		fish.position.y = Math.random() * viewHeight;
-	
+		fish.blendMode = Math.random()>0.5? PIXI.BLEND_MODES.OVERLAY:PIXI.BLEND_MODES.HARD_LIGHT;
 		// time to add the fish to the pond container!
-		stage.addChild(fish);
+		
 
 		// create some extra properties that will control movment
 
@@ -63,26 +68,20 @@
 
 		// create a random speed for the fish between 0 - 2
 		fish.speed = 2 + Math.random() * 2;	
-		
 
-  //  		fish.on('pointerover', onFish);
-  //  		function onFish(){
-  //  		console.log("on");
-		// fish.position.x += 40;
-  //  		}
-   		// fish.on('pointerout', offFish);
 
-		// finally we push the fish into the fishArray so it it can be easily accessed later
+		stage.addChild(fish);
 		fishArray.push(fish);
 
 	}
-// fish.on('pointerover', onFish);
-//    		function onFish(){
-//    		console.log("on");
-//    	fish.position.x = 0;
-// 		// fish.position.x += 40;
-// }
-	// create a bounding box box for the little fish 
+	// pondFloorSprite.on('click', ripple =>{
+	// 	fish.position.x = 100;			
+	// });
+	// stage.addChild(fish);
+
+
+
+
 	var fishBoundsPadding = 100;
 	var fishBounds = new PIXI.Rectangle(-fishBoundsPadding,
 										-fishBoundsPadding, 
@@ -96,12 +95,32 @@
 	function animate() 
 	{
 		// iterate through the fish and update the positiond
-		for (var i = 0; i < fishArray.length; i++) 
-		{
-			var fish = fishArray[i];
-		
-		fish.interactive = true;
-   		fish.on('pointermove', onFish);
+		// for (var i = 0; i < fishArray.length; i++) 
+		// {
+		// 	var fish = fishArray[i];
+
+		// 	fish.direction += fish.turningSpeed * 0.01;
+		// 	fish.position.x += Math.sin(fish.direction) * fish.speed;
+		// 	fish.position.y += Math.cos(fish.direction) * fish.speed;
+		// 	fish.rotation = -fish.direction - Math.PI/2;
+
+		// 	// wrap the fish by testing there bounds..
+		// 	if(fish.position.x < fishBounds.x)fish.position.x += fishBounds.width;
+		// 	else if(fish.position.x > fishBounds.x + fishBounds.width)fish.position.x -= fishBounds.width
+			
+		// 	if(fish.position.y < fishBounds.y)fish.position.y += fishBounds.height;
+		// 	else if(fish.position.y > fishBounds.y + fishBounds.height)fish.position.y -= fishBounds.height
+		// }
+		fishArray.forEach(item => {
+			var fish = item;
+			fish.interactive = true; 
+			fish.interactionFrequency = 100;
+
+
+
+		// 	var yq = 1;
+		// 	var xq = 1;
+
 			fish.direction += fish.turningSpeed * 0.01;
 			fish.position.x += Math.sin(fish.direction) * fish.speed;
 			fish.position.y += Math.cos(fish.direction) * fish.speed;
@@ -113,23 +132,25 @@
 			
 			if(fish.position.y < fishBounds.y)fish.position.y += fishBounds.height;
 			else if(fish.position.y > fishBounds.y + fishBounds.height)fish.position.y -= fishBounds.height
+		fish.mouseover = function(){
+			console.log('over');
+			fish.speed += 11;
+			// fish.position.x += 10;
+			// fish.position.y += 10;
+			fish.direction += .2;
 		}
-		document.addEventListener('mousemove', onmousemove);
+		fish.mouseout = function(){
+			console.log('out');
+			fish.speed -= 11;
+		}
 
 
-		var mx;
-		onmousemove = function(e){
-				mx = e.clientX;
-		};
+		})
 		
-   		function onFish(){
-   		for (var i = 0; i < fishArray.length; i++){
-   			fishArray[i].direction += .2;
    			// fishArray[i].position.y += .5;
-   		}
-   		}
 
-   		
+
+
 		// increment the ticker
 		tick += 0.1;
 		
