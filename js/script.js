@@ -28,7 +28,7 @@ stage.filterArea = new PIXI.Rectangle(0, 0, viewWidth, viewHeight);
 	stage.addChild(pondFloorSprite);
 
 let container = new PIXI.Container();
-var containerTexture = PIXI.Texture.fromImage("/images/solar-rays.png")
+var containerTexture = PIXI.Texture.fromImage("images/solar-rays.png")
 let containerSprite = new PIXI.Sprite(containerTexture);
 containerSprite.width= viewWidth;
 containerSprite.height = viewHeight;
@@ -74,7 +74,7 @@ stage.addChild(containerSprite);
 
 
 		// genrate an image name based on the fish id
-		var imagePath = `/images/fish${fishId}.png`;
+		var imagePath = `images/fish${fishId}.png`;
 		// create a new Texture that uses the image name that we just generated as its source
 		var fishTexture = PIXI.Texture.fromImage(imagePath);
 		// create asprite that uses our new sprite texture
